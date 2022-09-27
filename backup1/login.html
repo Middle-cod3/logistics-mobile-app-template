@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>E-Transapp</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="static/vendors/feather/feather.css">
+  <link rel="stylesheet" href="static/vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="static/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="static/css/vertical-layout-light/style.css">
+
+</head>
+
+<body onload="loaderfn()">
+  <div id="preload"></div>
+  <div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="content-wrapper d-flex align-items-center auth px-0">
+        <div class="row w-100 mx-0">
+          <div class="col-lg-4 mx-auto">
+            <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+              <div class="brand-logo">
+                <!-- <img src="static/images/logo.svg" alt="logo"> -->
+                <p>E-Transapp</p>
+              </div>
+              <h4>Hello! let's get started</h4>
+              <h6 class="font-weight-light">Sign in to continue.</h6>
+              <form class="pt-3">
+                <div class="form-group">
+                  <input type="text" value="sujoy" class="form-control form-control-lg" id="email" placeholder="Username">
+                </div>
+                <div class="form-group">
+                  <input type="password" value="sd123" class="form-control form-control-lg" id="password" placeholder="Password">
+                </div>
+                <div class="mt-3">
+                  <a id="login_submit" onclick="event.preventDefault(); login();" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SIGN IN</a>
+                </div> 
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script src="static/vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+
+  <script src="static/js/hoverable-collapse.js"></script>
+  <script src="static/js/template.js"></script>
+  <script src="static/js/settings.js"></script>
+  <script src="static/js/extra/script.js"></script>
+
+
+  <!-- Cookie checking -->
+  <script type="text/javascript">
+    $(window).on('load',function(){
+      var token=getCookie("token") ? window.location.href = "index.html" :""
+    }) // window load end
+  </script>
+
+  <!-- Login  -->
+  <script type="text/javascript">
+    login = () => {
+    loader.style.display="block";
+        var email=document.getElementById('email').value;
+        var password=document.getElementById('password').value;
+        var login_cred=[{"email":email,"password":password}];
+        // var base_url='https://mobilelogistics.herokuapp.com/api/login';
+        var base_url='https://mobilelogistics.herokuapp.com/api/login';
+        if(email && password != ''){
+          $.ajax({
+            url: base_url,
+            type: 'post',
+            data: JSON.stringify(login_cred),
+            dataType: 'json',
+            contentType: "application/json",
+            processData: false,
+            success: function (data) {
+              console.log(data," Login return data");
+                if (data['data']=='success') {
+                  var auth_key=[{"auth_key":data['auth_key']}];
+                  sessionStorage.setItem('auth_key', data['auth_key']);
+                  setCookie("auth_key",data['auth_key'],1) 
+                  loader.style.display="none";
+                  window.location.href = "index.html";
+                }else{
+                  alert("Username or Password Invalid.!")
+                }
+            }
+        }); //end ajax
+        }else{
+          alert("Any Field can not be blank.")
+        } // if else end
+    };//End login
+
+
+</script>
+
+  <!-- endinject -->
+</body>
+
+</html>
